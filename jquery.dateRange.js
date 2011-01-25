@@ -1,12 +1,11 @@
 (function($){
    $.fn.dateRange = function(options)
    {
-      var defaults = {selected: null};
+      var defaults = {: null};
       var opts = $.extend({}, defaults, options);
       var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
       var abbreviations = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec');
-      var weekTemplate = '<tr><td /><td /><td /><td /><td /><td /><td /></tr>';
-      var daySelector = 'td:not([colspan]):not(:empty)'
+      var daySelector = 'td:not(.m):not(:empty)'
       return this.each(function() 
       {
          if (this.dateRange) { return false; }
@@ -26,7 +25,6 @@
                $container.append(self.buildMonth(prev));
                $container.append(self.buildMonth(now));
                
-               $container.click(function(){return false;});
                $input.click(function()
                {
                   self.show();
@@ -38,6 +36,7 @@
                }).click(self.hide);
                
                $container.delegate(daySelector, 'click', self.clicked);
+               $container.click(function(){return false;});
             },
             show: function()
             {
@@ -115,17 +114,25 @@
                
                var table = document.createElement('table');
 
-               for (var i = 0; i < weeks; ++i)
+               
+               for (var i = 0, count = 1; i < weeks; ++i)
                {
-                  table.innerHTML += weekTemplate;
+                  var row = table.insertRow(-1)
+                  for(var j = 0; j < 7; ++j, ++count)
+                  {
+                     var cell = row.insertCell(-1);
+                     if (count > firstDay && count <= totalDays+firstDay)
+                     {
+                        cell.innerHTML = count - firstDay;
+                     }
+                  }
                }
                
-               var tds = table.getElementsByTagName('td'); 
-               for(var i = firstDay; i < totalDays + firstDay; ++i)
-               {                  
-                  tds[i].innerHTML = i - firstDay + 1;
-               }
-               table.innerHTML = '<tr><td colspan="7">' + months[date.getMonth()] + ' ' + date.getFullYear() + '</td></tr>' + table.innerHTML;
+               var header = table.insertRow(0);
+               var cell = header.insertCell();
+               cell.innerHTML = months[date.getMonth()] + ' ' + date.getFullYear();
+               cell.className = 'm'; //very stupid IE (all versions) fix
+               cell.colSpan = 7;
                
                var $table = $(table).data('date', date);
                self.highlight($table);

@@ -1,0 +1,23 @@
+<html>
+<head>
+   <link href="dateRange.css" media="screen" rel="stylesheet" type="text/css" />
+   <script type="text/javascript" src="jquery.min.js"></script>
+   <script type="text/javascript" src="jquery.dateRange.js"></script>
+</head>
+<body>
+<input type="text" id="date" />
+
+<script type="text/javascript">
+$(document).ready(function()
+{
+  $('#date').dateRange(
+  {
+     selected: function(dates)
+     {
+        var from = dates[0];
+        var to = dates[1];
+        //do something special
+     }
+  });
+});
+</script>
