@@ -99,8 +99,8 @@
             },
             initializeContainer: function()
             {
-               var position = $input.position();
-               var $container = $('<div>').addClass('calendar').appendTo('body').css({top: position.top, left: position.left})
+               $input.wrap($('<div>').addClass('calendarWrap'));
+               var $container = $('<div>').addClass('calendar').insertAfter($input);
                var $nav = $('<div>').addClass('nav').appendTo($container);
                $nav.html('<div class="prev">&lsaquo;</div><div class="next">&rsaquo;</div>');
                return $container;
