@@ -99,7 +99,8 @@
             },
             initializeContainer: function()
             {
-               var $container = $('<div>').addClass('calendar').appendTo('body');
+               var position = $input.position();
+               var $container = $('<div>').addClass('calendar').appendTo('body').css({top: position.top, left: position.left})
                var $nav = $('<div>').addClass('nav').appendTo($container);
                $nav.html('<div class="prev">&lsaquo;</div><div class="next">&rsaquo;</div>');
                return $container;
@@ -129,7 +130,7 @@
                }
                
                var header = table.insertRow(0);
-               var cell = header.insertCell();
+               var cell = header.insertCell(-1);
                cell.innerHTML = months[date.getMonth()] + ' ' + date.getFullYear();
                cell.className = 'm'; //very stupid IE (all versions) fix
                cell.colSpan = 7;
