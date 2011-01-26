@@ -1,7 +1,7 @@
 (function($){
    $.fn.dateRange = function(options)
    {
-      var defaults = {selected: null, startWith: null};
+      var defaults = {selected: null, startWith: null, minimumDate: null, maximumDate: null};
       var opts = $.extend({}, defaults, options);
       var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
       var abbreviations = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec');
@@ -11,14 +11,14 @@
          if (this.dateRange) { return false; }
       
          var $input = $(this);
-         var $container, selecting, selected;         
+         var $container, selecting, selected, $prev, $next;
          var self = 
          {
             initialize: function() 
             {               
                $container = self.initializeContainer().hide();
-               $container.find('div.prev').click(self.loadPrevious);
-               $container.find('div.next').click(self.loadNext);
+               $prev = $container.find('div.prev').click(self.loadPrevious);
+               $next = $container.find('div.next').click(self.loadNext);
                var now = new Date();
                now.setDate(1);
                var prev = new Date(now.getFullYear(), now.getMonth()-1, 1);
@@ -148,6 +148,10 @@
                
                var $table = $(table).data('date', date);
                self.highlight($table);
+               
+               if (opts.minimumDate && opts.minimumDate >= first) { $prev.hide() } else { $prev.show(); }
+               if (opts.maximumDate && opts.maximumDate <= last) { $next.hide() } else { $next.show(); }
+               
                return $table;
             },
             format: function(date)
