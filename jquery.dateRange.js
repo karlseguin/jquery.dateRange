@@ -5,7 +5,7 @@
       var opts = $.extend({}, defaults, options);
       var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
       var abbreviations = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec');
-      var daySelector = 'td:not(.m):not(:empty)'
+      var daySelector = 'td:not(.m):not(:empty)';
       return this.each(function() 
       {
          if (this.dateRange) { return false; }
@@ -21,7 +21,7 @@
                $container.find('div.next').click(self.loadNext);
                var now = new Date();
                now.setDate(1);
-               var prev = new Date(now.getFullYear(), now.getMonth()-1, 1)
+               var prev = new Date(now.getFullYear(), now.getMonth()-1, 1);
                $container.append(self.buildMonth(prev));
                $container.append(self.buildMonth(now));
                
@@ -118,7 +118,7 @@
                
                for (var i = 0, count = 1; i < weeks; ++i)
                {
-                  var row = table.insertRow(-1)
+                  var row = table.insertRow(-1);
                   for(var j = 0; j < 7; ++j, ++count)
                   {
                      var cell = row.insertCell(-1);
