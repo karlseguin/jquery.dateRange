@@ -29,7 +29,8 @@
                {
                   self.show();
                   return false;
-               });
+               }).attr('readonly', 'readonly');
+               
                $(document).keydown(function(e)
                {
                   if (e.keyCode == 27) { self.hide(); }
