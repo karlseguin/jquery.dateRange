@@ -1,7 +1,7 @@
 (function($){
    $.fn.dateRange = function(options)
    {
-      var defaults = {selected: null};
+      var defaults = {selected: null, startWith: null};
       var opts = $.extend({}, defaults, options);
       var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
       var abbreviations = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec');
@@ -37,11 +37,17 @@
                
                $container.delegate(daySelector, 'click', self.clicked);
                $container.click(function(){return false;});
+               
+               if (opts.startWith != null)
+               {
+                  selected = opts.startWith;
+                  self.rangeSelected();
+               }
             },
             show: function()
             {
                selecting = new Array();
-               $container.show();               
+               $container.show();
             },
             hide: function()
             {
@@ -55,18 +61,22 @@
                if (selecting.length == 2)
                {
                   selected = selecting;
-                  if (selected[0] > selected[1])
-                  {
-                     var x = selected[0];
-                     selected[0] = selected[1];
-                     selected[1] = x;
-                  }
-                  $input.val(self.format(selected[0]) + ' - ' + self.format(selected[1]));
-                  self.highlight($container.find('table:first'));
-                  self.highlight($container.find('table:last'));
-                  self.hide();
-                  if (opts.selected != null) { opts.selected(selected); }
+                  self.rangeSelected();
                }
+            },
+            rangeSelected: function()
+            {            
+               if (selected[0] > selected[1])
+               {
+                  var x = selected[0];
+                  selected[0] = selected[1];
+                  selected[1] = x;
+               }
+               $input.val(self.format(selected[0]) + ' - ' + self.format(selected[1]));
+               self.highlight($container.find('table:first'));
+               self.highlight($container.find('table:last'));
+               self.hide();
+               if (opts.selected != null) { opts.selected(selected); } 
             },
             highlight: function($table)
             {
