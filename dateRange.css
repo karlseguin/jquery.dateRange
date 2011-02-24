@@ -1,5 +1,5 @@
 div.calendarWrap{position:relative;}
-div.calendar{border:1px solid #e6e6e6;overflow:auto;width:480px;background:#f0f0f0;position:absolute;line-height:1em;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px-moz-user-select:none;-webkit-user-select: none;-khtml-user-select: none;user-select: none;}
+div.calendar{border:1px solid #e6e6e6;overflow:auto;width:460px;background:#f0f0f0;position:absolute;line-height:1em;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px-moz-user-select:none;-webkit-user-select: none;-khtml-user-select: none;user-select: none;}
 div.calendar div.nav{height:24px;}
 div.calendar div.nav div{cursor:pointer;background:#e6e6e6;width:25px;height:25px;text-align:center;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;font-weight:bold;}
 div.calendar div.nav div.next{position:absolute;right:0;top:0}

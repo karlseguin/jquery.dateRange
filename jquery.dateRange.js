@@ -29,7 +29,10 @@
                {
                   self.show();
                   return false;
-               }).attr('readonly', 'readonly');
+               }).keydown(function(e)
+               {
+                 if (e.keyCode == 13) { self.entered(); }
+               });
                
                $(document).keydown(function(e)
                {
@@ -44,6 +47,23 @@
                   selected = opts.startWith;
                   self.rangeSelected();
                }
+            },
+            entered: function()
+            {
+              var values = $input.val().split('-');
+              if (values.length != 2) { return false; }
+              
+              var from = self.parseDate(values[0].replace(/^\s*/, '').replace(/\s*$/, ''));
+              var to = self.parseDate(values[1].replace(/^\s*/, '').replace(/\s*$/, ''));
+              if (from == null || to == null) { return false; }
+              
+              selected = [from, to];
+              self.rangeSelected();
+              return false;
+            },
+            parseDate: function(value)
+            {
+              return new Date(value);
             },
             show: function()
             {
