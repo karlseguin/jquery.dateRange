@@ -11,19 +11,20 @@
          if (this.dateRange) { return false; }
       
          var $input = $(this);
-         var $container, selecting, selected, $prev, $next;
+         var $container, selecting, selected;
          var self = 
          {
             initialize: function() 
             {               
                $container = self.initializeContainer().hide();
-               $prev = $container.find('div.prev').click(self.loadPrevious);
-               $next = $container.find('div.next').click(self.loadNext);
+               $prev = $container.delegate('td.prev', 'click', self.loadPrevious);
+               $next = $container.delegate('td.next', 'click', self.loadNext);
                var now = new Date();
                now.setDate(1);
                var prev = new Date(now.getFullYear(), now.getMonth()-1, 1);
                $container.append(self.buildMonth(prev));
                $container.append(self.buildMonth(now));
+               self.fixNav();
                
                $input.click(function()
                {
@@ -119,21 +120,23 @@
             loadPrevious: function()
             {               
                $container.children('table:eq(1)').remove();
-               var date = $container.children('table:eq(0)').data('date');
-               $container.find('div.nav').after(self.buildMonth(new Date(date.getFullYear(), date.getMonth()-1, 1)));
+               var $remaining = $container.children('table')
+               var date = $remaining.data('date');
+               $remaining.before(self.buildMonth(new Date(date.getFullYear(), date.getMonth()-1, 1)));
+               self.fixNav();
             },
             loadNext: function()
             {               
                $container.children('table:eq(0)').remove();
-               var date = $container.children('table:eq(0)').data('date');
-               $container.find('table').after(self.buildMonth(new Date(date.getFullYear(), date.getMonth()+1, 1)));            
+               var $remaining = $container.children('table')
+               var date = $remaining.data('date');
+               $remaining.after(self.buildMonth(new Date(date.getFullYear(), date.getMonth()+1, 1)));            
+               self.fixNav();
             },
             initializeContainer: function()
             {
                $input.wrap($('<div>').addClass('calendarWrap'));
                var $container = $('<div>').addClass('calendar').insertAfter($input);
-               var $nav = $('<div>').addClass('nav').appendTo($container);
-               $nav.html('<div class="prev">&lsaquo;</div><div class="next">&rsaquo;</div>');
                return $container;
             },
             buildMonth: function(date)
@@ -143,9 +146,7 @@
                var firstDay = first.getDay();
                var totalDays = last.getDate();
                var weeks = Math.ceil((totalDays + firstDay) / 7);
-               
                var table = document.createElement('table');
-
                
                for (var i = 0, count = 1; i < weeks; ++i)
                {
@@ -159,24 +160,50 @@
                      }
                   }
                }
-               
-               var header = table.insertRow(0);
-               var cell = header.insertCell(-1);
-               cell.innerHTML = months[date.getMonth()] + ' ' + date.getFullYear();
-               cell.className = 'm'; //very stupid IE (all versions) fix
-               cell.colSpan = 7;
-               
+               self.insertHeader(date, table);
                var $table = $(table).data('date', date);
                self.highlight($table);
                
-               if (opts.minimumDate && opts.minimumDate >= first) { $prev.hide() } else { $prev.show(); }
-               if (opts.maximumDate && opts.maximumDate <= last) { $next.hide() } else { $next.show(); }
+               if (opts.minimumDate && opts.minimumDate >= first) { self.prev().hide() } else { self.prev().show(); }
+               if (opts.maximumDate && opts.maximumDate <= last) { self.next().hide() } else { self.next().show(); }
                
                return $table;
             },
             format: function(date)
             {
                return abbreviations[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+            },
+            insertHeader: function(date, table)
+            {
+              var header = table.insertRow(0);
+              var cell = header.insertCell(-1);
+              cell.className = 'm nav';
+              
+              cell = header.insertCell(1);
+              cell.innerHTML = months[date.getMonth()] + ' ' + date.getFullYear();
+              cell.className = 'm'; //very stupid IE (all versions) fix
+              cell.colSpan = 5;
+              
+              cell = header.insertCell(2);
+              cell.className = 'm nav';
+            },
+            prev: function()
+            {
+              return $container.find('div.prev');
+            },
+            next: function()
+            {
+              return $container.find('div.next');
+            },
+            fixNav: function() 
+            {
+              var $first = $container.find('table:first tr:first');
+              $first.find('td:first').addClass('prev nav').html('&lsaquo;')
+              $first.find('td:last').removeClass('next nav').html('');
+          
+              var $second = $container.find('table:last tr:first');
+              $second.find('td:first').removeClass('prev nav').html('')
+              $second.find('td:last').addClass('next nav').html('&rsaquo;');
             }
          };
          this.dateRange = self;
