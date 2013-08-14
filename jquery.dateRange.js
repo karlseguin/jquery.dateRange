@@ -2,7 +2,7 @@
    $.fn.dateRange = function(options)
    {
       if (options && options.command == 'entered') {
-        this.get(0).dateRange.entered();
+        this.get(0).dateRange.set(options.from, options.to).entered();
         return this;
       }
       var defaults = {selected: null, startWith: null, minimumDate: null, maximumDate: null};
@@ -52,6 +52,10 @@
                   selected = opts.startWith;
                   self.rangeSelected();
                }
+            },
+            set: function(from, to) {
+              $input.val(self.format(from) + ' - ' + self.format(to));
+              return this;
             },
             entered: function()
             {
