@@ -1,6 +1,10 @@
 (function($){
    $.fn.dateRange = function(options)
    {
+      if (options && options.command == 'entered') {
+        this.get(0).dateRange.entered();
+        return this;
+      }
       var defaults = {selected: null, startWith: null, minimumDate: null, maximumDate: null};
       var opts = $.extend({}, defaults, options);
       var months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
